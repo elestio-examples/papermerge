@@ -1,0 +1,62 @@
+ports:
+  - protocol: "HTTPS"
+    targetProtocol: "HTTP"
+    listeningPort: "443"
+    targetPort: "12000"
+    targetIP: "172.17.0.1"
+    public: true
+    path: "/"
+    isAuth: false
+  - protocol: "HTTPS"
+    targetProtocol: "HTTP"
+    listeningPort: "36617"
+    targetPort: "8575"
+    targetIP: "172.17.0.1"
+    public: true
+    path: "/"
+    isAuth: false
+environments:
+  - key: "SOFTWARE_VERSION_TAG"
+    value: "3.0"
+  - key: "PAPERMERGE__SECURITY__SECRET_KEY"
+    value: "random_password-random_passwordrandom_password"
+  - key: "PAPERMERGE__AUTH__USERNAME"
+    value: "admin"
+  - key: PAPERMERGE__AUTH__PASSWORD
+    value: "random_password"
+  - key: POSTGRES_USER
+    value: "postgres"
+  - key: POSTGRES_PASSWORD
+    value: "random_password"
+  - key: POSTGRES_DB
+    value: "papermerge"
+  - key: ADMIN_PASSWORD
+    value: "random_password"
+  - key: "ADMIN_EMAIL"
+    value: "[EMAIL]"
+
+config:
+  runTime: "dockerCompose"
+  version: ""
+  framework: ""
+  buildCommand: "docker-compose build"
+  buildDir: "/"
+  runCommand: "docker-compose up -d"
+  icon: ""
+  screenshot: "papermerge.png"
+lifeCycleConfig:
+  preInstallCommand: "./scripts/preInstall.sh"
+  postInstallCommand: "./scripts/postInstall.sh"
+  preBackupCommand: "./scripts/preBackup.sh"
+  postBackupCommand: "./scripts/postBackup.sh"
+  preRestoreCommand: "./scripts/preRestore.sh"
+  postRestoreCommand: "./scripts/postRestore.sh"
+webUI:
+  - url: "https://[CI_CD_DOMAIN]"
+    label: "Papermerge Admin"
+    login: "admin"
+    password: "[ADMIN_PASSWORD]"
+  - url: "https://[CI_CD_DOMAIN]:36617"
+    label: "PgAdmin"
+    login: "[ADMIN_EMAIL]"
+    password: "[ADMIN_PASSWORD]"
