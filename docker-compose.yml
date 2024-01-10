@@ -28,7 +28,7 @@ services:
     image: elestio/redis:6.0
   db:
     restart: always
-    image: elestio/postgre:15
+    image: elestio/postgres:15
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
