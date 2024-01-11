@@ -34,6 +34,8 @@ environments:
     value: "random_password"
   - key: "ADMIN_EMAIL"
     value: "[EMAIL]"
+  - key: "PAPERMERGE__OCR__DEFAULT_LANGUAGE"
+    value: "eng"
 
 config:
   runTime: "dockerCompose"

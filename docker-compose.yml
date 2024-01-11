@@ -4,11 +4,13 @@ x-backend: &common
   image: papermerge/papermerge:${SOFTWARE_VERSION_TAG}
   restart: always
   environment:
-    PAPERMERGE__SECURITY__SECRET_KEY: 12345
+    PAPERMERGE__SECURITY__SECRET_KEY: ${PAPERMERGE__SECURITY__SECRET_KEY}
     PAPERMERGE__AUTH__USERNAME: ${PAPERMERGE__AUTH__USERNAME}
     PAPERMERGE__AUTH__PASSWORD: ${PAPERMERGE__AUTH__PASSWORD}
+    PAPERMERGE__AUTH__EMAIL: ${ADMIN_EMAIL}
     PAPERMERGE__DATABASE__URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     PAPERMERGE__REDIS__URL: redis://redis:6379/0
+    PAPERMERGE__OCR__DEFAULT_LANGUAGE: ${PAPERMERGE__OCR__DEFAULT_LANGUAGE}
   volumes:
     - ./storage/index_db:/core_app/index_db
     - ./storage/media:/core_app/media
