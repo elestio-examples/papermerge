@@ -17,7 +17,7 @@ ports:
     isAuth: false
 environments:
   - key: "SOFTWARE_VERSION_TAG"
-    value: "3.0"
+    value: "3.0.1rc5"
   - key: "PAPERMERGE__SECURITY__SECRET_KEY"
     value: "random_password-random_passwordrandom_password"
   - key: "PAPERMERGE__AUTH__USERNAME"
