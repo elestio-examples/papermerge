@@ -22,9 +22,13 @@ services:
     depends_on:
       - redis
       - db
+    env_file:
+      - .env
   worker:
     <<: *common
     command: worker
+    env_file:
+      - .env
   redis:
     restart: always
     image: elestio/redis:6.0
@@ -35,14 +39,18 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - .env
     ports:
       - 172.17.0.1:56225:5432
-    volumes:
-      - ./storage/postgres_data:/var/lib/postgresql/data/
+    # volumes:
+    #   - ${folderName}/storage/postgres_data:/var/lib/postgresql/data/
 
   pgadmin:
     image: elestio/pgadmin:latest
     restart: always
+    env_file:
+      - .env
     environment:
       PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
