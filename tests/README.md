@@ -8,7 +8,7 @@
 
 # Papermerge, verified and packaged by Elestio
 
-[Papermerge](https://github.com/papermerge/docker)  is a open source document management system designed to work with scanned documents (also called digital archives).
+[Papermerge](https://github.com/papermerge/docker) is a open source document management system designed to work with scanned documents (also called digital archives).
 
 <img src="https://github.com/elestio-examples/papermerge/raw/main/papermerge.png" alt="Papermerge" width="800">
 
@@ -43,8 +43,8 @@ Create data folders with correct permissions
 
 Run the project with the following command
 
+    ./scripts/preInstall.sh
     docker-compose up -d
-    ./scripts/postInstall.sh
 
 You can access the Web UI at: `http://your-domain:12000`
 
@@ -52,71 +52,65 @@ You can access the Web UI at: `http://your-domain:12000`
 
 Here are some example snippets to help you get started creating a container.
 
-        version: "3.9"
+    version: "3.9"
 
-        x-backend: &common
-        image: elestio4test/papermerge:${SOFTWARE_VERSION_TAG}
-        restart: always
-        environment:
-            PAPERMERGE__SECURITY__SECRET_KEY: ${PAPERMERGE__SECURITY__SECRET_KEY}
-            PAPERMERGE__AUTH__USERNAME: ${PAPERMERGE__AUTH__USERNAME}
-            PAPERMERGE__AUTH__PASSWORD: ${PAPERMERGE__AUTH__PASSWORD}
-            PAPERMERGE__AUTH__EMAIL: ${ADMIN_EMAIL}
-            PAPERMERGE__DATABASE__URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-            PAPERMERGE__REDIS__URL: redis://redis:6379/0
-            PAPERMERGE__OCR__DEFAULT_LANGUAGE: ${PAPERMERGE__OCR__DEFAULT_LANGUAGE}
-        volumes:
-            - ./storage/index_db:/core_app/index_db
-            - ./storage/media:/core_app/media
-        services:
-        web:
-            <<: *common
-            ports:
-            - "172.17.0.1:12000:8000"
-            depends_on:
+    x-backend: &common
+    image: papermerge/papermerge:${SOFTWARE_VERSION_TAG}
+    restart: always
+    environment:
+        PAPERMERGE__SECURITY__SECRET_KEY: ${PAPERMERGE__SECURITY__SECRET_KEY}
+        PAPERMERGE__AUTH__USERNAME: ${PAPERMERGE__AUTH__USERNAME}
+        PAPERMERGE__AUTH__PASSWORD: ${PAPERMERGE__AUTH__PASSWORD}
+        PAPERMERGE__AUTH__EMAIL: ${ADMIN_EMAIL}
+        PAPERMERGE__DATABASE__URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+        PAPERMERGE__REDIS__URL: redis://redis:6379/0
+        PAPERMERGE__OCR__DEFAULT_LANGUAGE: ${PAPERMERGE__OCR__DEFAULT_LANGUAGE}
+    volumes:
+        - ./storage/index_db:/core_app/index_db
+        - ./storage/media:/core_app/media
+    services:
+    web:
+        <<: *common
+        ports:
+            - "172.17.0.1:12000:80"
+        depends_on:
             - redis
             - db
-        worker:
-            <<: *common
-            command: worker
-        redis:
-            restart: always
-            image: elestio/redis:6.0
-        db:
-            restart: always
-            image: elestio/postgres:15
-            environment:
+    worker:
+        <<: *common
+        command: worker
+    redis:
+        restart: always
+        image: elestio/redis:6.0
+    db:
+        restart: always
+        image: elestio/postgres:15
+        environment:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DB}
-            ports:
+        ports:
             - 172.17.0.1:56225:5432
-            volumes:
+        volumes:
             - ./storage/postgres_data:/var/lib/postgresql/data/
-
-        pgadmin:
-            image: elestio/pgadmin:latest
-            restart: always
-            environment:
-            PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
-            PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
-            PGADMIN_LISTEN_PORT: 8080
-            ports:
-            - "172.17.0.1:8575:8080"
-            volumes:
-            - ./servers.json:/pgadmin4/servers.json
-
-
 
 ### Environment variables
 
-|           Variable           |         Value (example)            |
-| :--------------------------: | :--------------------------------: |
-|     SOFTWARE_VERSION_TAG     |            latest                  |
-|        ADMIN_PASSWORD        |         your-password              |
-| PAPERMERGE__MAIN__SECRET_KEY |         your-secret                |
-| DJANGO_SUPERUSER_PASSWORD    |         your-password              |
-| DJANGO_SUPERUSER_USERNAME    |         your-username              |
+|               Variable                |   Value (example)    |
+| :-----------------------------------: | :------------------: |
+|         SOFTWARE_VERSION_TAG          |        latest        |
+| PAPERMERGE\_\_SECURITY\_\_SECRET_KEY  | your-strong-password |
+|   PAPERMERGE\_\_MAIN\_\_SECRET_KEY    | your-strong-password |
+|       DJANGO_SUPERUSER_PASSWORD       |    your-password     |
+|       DJANGO_SUPERUSER_USERNAME       |    your@email.com    |
+|    PAPERMERGE\_\_AUTH\_\_USERNAME     |        admin         |
+|    PAPERMERGE\_\_AUTH\_\_PASSWORD     |    your-password     |
+|             POSTGRES_USER             |       postgres       |
+|           POSTGRES_PASSWORD           |    your-password     |
+|              POSTGRES_DB              |      papermerge      |
+|            ADMIN_PASSWORD             |    your-password     |
+|              ADMIN_EMAIL              |   admin@email.com    |
+| PAPERMERGE\_\_OCR\_\_DEFAULT_LANGUAGE |         eng          |
 
 # Maintenance
 

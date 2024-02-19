@@ -1,7 +1,7 @@
 version: "3.9"
 
 x-backend: &common
-  image: elestio4test/papermerge:${SOFTWARE_VERSION_TAG}
+  image: papermerge/papermerge:${SOFTWARE_VERSION_TAG}
   restart: always
   environment:
     PAPERMERGE__SECURITY__SECRET_KEY: ${PAPERMERGE__SECURITY__SECRET_KEY}
@@ -18,17 +18,13 @@ services:
   web:
     <<: *common
     ports:
-      - "172.17.0.1:12000:8000"
+      - "172.17.0.1:12000:80"
     depends_on:
       - redis
       - db
-    env_file:
-      - .env
   worker:
     <<: *common
     command: worker
-    env_file:
-      - .env
   redis:
     restart: always
     image: elestio/redis:6.0
@@ -39,23 +35,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    env_file:
-      - .env
     ports:
       - 172.17.0.1:56225:5432
-    # volumes:
-    #   - ${folderName}/storage/postgres_data:/var/lib/postgresql/data/
-
-  pgadmin:
-    image: elestio/pgadmin:latest
-    restart: always
-    env_file:
-      - .env
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
-      PGADMIN_LISTEN_PORT: 8080
-    ports:
-      - "172.17.0.1:8575:8080"
     volumes:
-      - ./servers.json:/pgadmin4/servers.json
+      - ./storage/postgres_data:/var/lib/postgresql/data/
