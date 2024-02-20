@@ -18,7 +18,7 @@ services:
   web:
     <<: *common
     ports:
-      - "172.17.0.1:12000:80"
+      - "172.17.0.1:12000:8000"
     depends_on:
       - redis
       - db

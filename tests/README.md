@@ -72,7 +72,7 @@ Here are some example snippets to help you get started creating a container.
     web:
         <<: *common
         ports:
-            - "172.17.0.1:12000:80"
+            - "172.17.0.1:12000:8000"
         depends_on:
             - redis
             - db
