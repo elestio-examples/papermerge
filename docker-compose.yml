@@ -1,7 +1,7 @@
 version: "3.9"
 
 x-backend: &common
-  image: papermerge/papermerge:${SOFTWARE_VERSION_TAG}
+  image: elestio/papermerge:${SOFTWARE_VERSION_TAG}
   restart: always
   environment:
     PAPERMERGE__SECURITY__SECRET_KEY: ${PAPERMERGE__SECURITY__SECRET_KEY}
