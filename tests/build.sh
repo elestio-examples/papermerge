@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+rm -rf ./docker-compose.yaml
 cp ./papermerge/Dockerfile ./Dockerfile
 mv ./README-new.md ./README.md
 
